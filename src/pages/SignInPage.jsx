@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
+import { signIn } from '../lib/Auth'
 
 const SignInPage = () => {
 
@@ -7,7 +8,24 @@ const SignInPage = () => {
     const [password, setPassword] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState(null)
+    const navigate = useNavigate()  
 
+    const handleSubmit = async (event)=>{
+        
+         event.preventDefault()
+         
+            setIsLoading(true)
+         try {
+             await  signIn(email , password)
+
+             navigate('/')
+         } catch (error) {
+             console.log("error happened in sign in :",error);
+             
+         }finally{
+            setIsLoading(false)
+         }
+    }
 
 
     return (
@@ -26,7 +44,7 @@ const SignInPage = () => {
                         </div>
                     )}
 
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <div className="mb-6">
                             <label
                                 className="block text-gray-700 text-sm font-semibold mb-2"
