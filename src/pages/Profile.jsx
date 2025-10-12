@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
 import toast from 'react-hot-toast';
 import { CiCamera } from 'react-icons/ci';
+import supabase from '../lib/supabase';
 
 const Profile = () => {
      
@@ -40,7 +41,20 @@ const Profile = () => {
         // path 
         const filePath = `avatars/${fileName}${fileEx}`
 
-        // upload 
+        // upload img 
+        const {error } = await supabase.storage.from('profile')
+           .upload(filePath ,avatar)
+           if(error){
+             console.error("error Upload:",error);
+             toast.error("upload error ")
+           }
+
+         const { data }  = supabase.storage.from('profile').getPublicUrl(filePath) 
+        
+          console.log("img url :",data.publicUrl);
+          // setAvatarUrl(data.publicUrl)
+          // inset the data url in Users table 
+
         
       } catch (error) {
          console.error('Uploading error:',error);
