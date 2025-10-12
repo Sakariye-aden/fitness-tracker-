@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 import toast from 'react-hot-toast';
 import { CiCamera } from 'react-icons/ci';
 import supabase from '../lib/supabase';
+import { useAuth } from '../context/AuthContext';
 
 const Profile = () => {
      
@@ -12,7 +13,7 @@ const Profile = () => {
 
      const InputRef = useRef()
 
-  const imgPhoto = 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHByb2ZpbGUlMjBwaWN0dXJlfGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=500'
+      const { user  } = useAuth()
 
    const handleChange = (e)=>{
      const file = e.target.files[0]
@@ -32,35 +33,39 @@ const Profile = () => {
 
      
       e.preventDefault();
-        setIsLoading(true)
-      try {
-        // frist Upload the img then insert 
-        const fileEx = avatar.name.split('.').pop()
-        // file name 
-        const fileName = `${Date.now()}.${fileEx}`
-        // path 
-        const filePath = `avatars/${fileName}${fileEx}`
 
-        // upload img 
-        const {error } = await supabase.storage.from('profile')
-           .upload(filePath ,avatar)
-           if(error){
-             console.error("error Upload:",error);
-             toast.error("upload error ")
-           }
+       console.log(user);
+      //   setIsLoading(true)
+      // try {
+      //   // frist Upload the img then insert 
+      //   const fileEx = avatar.name.split('.').pop()
+      //   // file name 
+      //   const fileName = `${Date.now()}.${fileEx}`
+      //   // path 
+      //   const filePath = `avatars/${fileName}${fileEx}`
 
-         const { data }  = supabase.storage.from('profile').getPublicUrl(filePath) 
+      //   // upload img 
+      //   const {error } = await supabase.storage.from('profile')
+      //      .upload(filePath ,avatar)
+      //      if(error){
+      //        console.error("error Upload:",error);
+      //        toast.error("upload error ")
+      //      }
+
+      //    const { data }  = supabase.storage.from('profile').getPublicUrl(filePath) 
         
-          console.log("img url :",data.publicUrl);
-          // setAvatarUrl(data.publicUrl)
-          // inset the data url in Users table 
+      //     console.log("img url :",data.publicUrl);
+      //     // state img src 
+      //     setAvatarUrl(data.publicUrl)
+      //     // insert the data url in Users table 
+         
 
         
-      } catch (error) {
-         console.error('Uploading error:',error);
-      }finally{
-        setIsLoading(false)
-      } 
+      // } catch (error) {
+      //    console.error('Uploading error:',error);
+      // }finally{
+      //   setIsLoading(false)
+      // } 
    }
 
   return (
