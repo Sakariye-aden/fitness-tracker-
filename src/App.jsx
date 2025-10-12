@@ -5,6 +5,7 @@ import SignUpPage from "./pages/SignUpPage"
 import Header from "./components/Header"
 import Footer from "./components/Footer"
 import Profile from "./pages/Profile"
+import { Toaster } from "react-hot-toast"
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
         </main>
        {/* Footer */}
         <Footer />
+        <Toaster />
     </div>
   )
 }
