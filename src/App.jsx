@@ -8,6 +8,7 @@ import Profile from "./pages/Profile"
 import { Toaster } from "react-hot-toast"
 import { AuthProvider } from "./context/AuthContext"
 import UnAuthenticated from "./components/UnAuthenticated"
+import ProtectedRoute from "./components/ProtectedRoute"
 
 
 function App() {
@@ -38,8 +39,15 @@ function App() {
                </UnAuthenticated>
                }     
              />
-
-              <Route path="/profile" element={<Profile/> }/>
+             {/* Protected Route  */}
+              <Route path="/profile"
+               element={
+                 <ProtectedRoute>
+                      <Profile/> 
+                 </ProtectedRoute>
+                }
+               
+               />
           </Routes>
         </main>
        {/* Footer */}
