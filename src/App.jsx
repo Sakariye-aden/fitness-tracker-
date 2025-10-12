@@ -7,6 +7,7 @@ import Footer from "./components/Footer"
 import Profile from "./pages/Profile"
 import { Toaster } from "react-hot-toast"
 import { AuthProvider } from "./context/AuthContext"
+import UnAuthenticated from "./components/UnAuthenticated"
 
 
 function App() {
@@ -23,8 +24,20 @@ function App() {
              {/* public route */}
              <Route path="/" element={<HomePage />} />
              {/* Unauthorized Route */}
-             <Route path="/signin" element={<SignInPage />} />
-             <Route path="/signup"  element={<SignUpPage/>} />
+             <Route path="/signin" 
+              element={ 
+                <UnAuthenticated>
+                   <SignInPage />
+                </UnAuthenticated>       
+              } 
+             />
+             <Route path="/signup"  
+             element={
+               <UnAuthenticated>
+                  <SignUpPage/>
+               </UnAuthenticated>
+               }     
+             />
 
               <Route path="/profile" element={<Profile/> }/>
           </Routes>
