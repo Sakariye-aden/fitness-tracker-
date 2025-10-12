@@ -1,18 +1,17 @@
 import { createClient } from "@supabase/supabase-js";
 
-const Supabase_url = import.meta.env.VITE_SUPABASE_URL;
-const Supabase_anon = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const Supabase_Url= import.meta.env.VITE_SUPABASE_URL;
+const Supabase_Anon = import.meta.env.VITE_SUPABASE_ANON;
 
-const supabase = createClient(Supabase_url,Supabase_anon,{
-    auth:{
+const supabase = createClient(Supabase_Url ,Supabase_Anon ,{
+     auth:{
         persistSession:true,
         autoRefreshToken:true
     },
-     realtime:{
+    realtime:{
         params:{
             eventsPerSecond:10
         }
-     }
+    }
 })
-
-export default supabase
+export default supabase;

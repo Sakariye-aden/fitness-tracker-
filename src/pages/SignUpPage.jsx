@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router";
+import { signUp } from "../lib/Auth";
 
 const SignUpPage = () => {
 
@@ -13,10 +14,15 @@ const SignUpPage = () => {
   const [success, setSuccess] = useState(false);
 
    
-  const handleSubmit = (event)=>{
+  const handleSubmit = async  (event)=>{
      event.preventDefault()
-
-    
+      
+     try {
+           await signUp(email , password ,username)
+     } catch (error) {
+       console.error(error);
+     }
+     
   }
 
 
