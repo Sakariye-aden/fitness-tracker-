@@ -1,8 +1,9 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast';
 import { CiCamera } from 'react-icons/ci';
 import supabase from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
+import { getUserinfo } from '../lib/Auth';
 
 const Profile = () => {
      
@@ -12,8 +13,24 @@ const Profile = () => {
      const [avatarUrl , setAvatarUrl]= useState(null)
 
      const InputRef = useRef()
-
       const { user  } = useAuth()
+
+      useEffect(()=>{
+          const fetch = async ()=>{
+              try {
+                const {username, avatar_url}= await getUserinfo(user.id)
+                 
+                if(username){
+                  setUsername(username)
+                  setAvatarUrl(avatar_url)
+                }
+                
+              } catch (error) {
+                 console.error(error);
+              }
+          }
+          fetch()
+      },[user])
 
    const handleChange = (e)=>{
      const file = e.target.files[0]
@@ -27,7 +44,7 @@ const Profile = () => {
       const preview = URL.createObjectURL(file)
       setAvatarUrl(preview)
    }
-   console.log(avatar);
+
 
    const handleSubmit = async (e)=>{
 
@@ -35,37 +52,48 @@ const Profile = () => {
       e.preventDefault();
 
        console.log(user);
-      //   setIsLoading(true)
-      // try {
-      //   // frist Upload the img then insert 
-      //   const fileEx = avatar.name.split('.').pop()
-      //   // file name 
-      //   const fileName = `${Date.now()}.${fileEx}`
-      //   // path 
-      //   const filePath = `avatars/${fileName}${fileEx}`
+        setIsLoading(true)
+      try {
+        // frist Upload the img then insert 
+        const fileEx = avatar.name.split('.').pop()
+        // file name 
+        const fileName = `${Date.now()}.${fileEx}`
+        // path 
+        const filePath = `avatars/${fileName}${fileEx}`
 
-      //   // upload img 
-      //   const {error } = await supabase.storage.from('profile')
-      //      .upload(filePath ,avatar)
-      //      if(error){
-      //        console.error("error Upload:",error);
-      //        toast.error("upload error ")
-      //      }
+        // upload img 
+        const {error } = await supabase.storage.from('profile')
+           .upload(filePath ,avatar)
+           if(error){
+             console.error("error Upload:",error);
+             toast.error("upload error ")
+           }
 
-      //    const { data }  = supabase.storage.from('profile').getPublicUrl(filePath) 
+         const { data }  = supabase.storage.from('profile').getPublicUrl(filePath) 
         
-      //     console.log("img url :",data.publicUrl);
-      //     // state img src 
-      //     setAvatarUrl(data.publicUrl)
-      //     // insert the data url in Users table 
-         
+          console.log("img url :",data.publicUrl);
+          // state img src 
+          setAvatarUrl(data.publicUrl)
+            const Updates ={
+               username,
+               avatar_url:data.publicUrl
+            }
+          // insert the data url in Users table 
+          const {date : updateUser , error:UpdateEror}= await supabase
+                .from('users')
+                 .update(Updates)
+                 .eq('id', user.id)
+                 
 
+            if(UpdateEror){
+              console.error('updated Error:',UpdateEror);
+            }
         
-      // } catch (error) {
-      //    console.error('Uploading error:',error);
-      // }finally{
-      //   setIsLoading(false)
-      // } 
+      } catch (error) {
+         console.error('Uploading error:',error);
+      }finally{
+        setIsLoading(false)
+      } 
    }
 
   return (
@@ -86,7 +114,7 @@ const Profile = () => {
               </div>  
                <div className=' mt-13 py-4 text-center '>
                    <p className='text-2xl font-bold text-gray-900'>Profile Info</p>
-                    <p className='text-xl font-medium  text-gray-800'>username : sakariye</p>
+                    <p className='text-xl font-medium  text-gray-800'>username : {username}</p>
                </div>
             </div>
 

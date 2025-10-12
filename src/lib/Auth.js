@@ -108,7 +108,7 @@ export const getUserinfo = async (userId)=>{
 
 export const onAuthStateChange = (callback)=>{
     supabase.auth.onAuthStateChange((event , session)=>{
-        console.log("ssesion",session.user);
+        // console.log("ssesion",session.user);
         callback(session?.user)
     })
 }
