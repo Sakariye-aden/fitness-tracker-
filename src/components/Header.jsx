@@ -3,11 +3,14 @@ import { Link } from "react-router";
 import { CiMenuBurger } from "react-icons/ci";
 import { MdClose } from "react-icons/md";
 import { FaChevronRight } from "react-icons/fa6";
+import { useAuth } from "../context/AuthContext";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDrobDown, setIsDrobDown] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { user , profile ,isLoggedIn } =useAuth()
+
+  
 
   const avatar =
     "https://media.istockphoto.com/id/1404289793/photo/head-shot-portrait-attractive-30s-business-lady-pose-indoor.jpg?s=612x612&w=0&k=20&c=kqfG2KCmhf6t9w6vrT7-tHqhrio4ecS0UfpuwFe2nb4=";
@@ -57,14 +60,14 @@ const Header = () => {
             {isLoggedIn ? (
               //  profile
               <div className="flex items-center space-x-3 ">
-                <span className="font-medium text-gray-600">Hello Abdi</span>
+                <span className="font-medium text-gray-600">Hello {profile?.username}</span>
                 {/* profile  */}
                 <div
                   className="relative"
                   onClick={() => setIsDrobDown(!isDrobDown)}
                 >
                   <img
-                    src={avatar}
+                    src={profile?.avatar_url}
                     alt="avatat"
                     className="w-10 h-10 rounded-full object-cover"
                   />
