@@ -32,7 +32,8 @@ export const AuthProvider = ({children})=>{
     const value = {
         user,
         profile ,
-        isLoading
+        isLoading,
+        isLoggedIn :!!user
     }
 
     return (
