@@ -15,7 +15,6 @@ export const signUp = async (email , password , username="")=>{
       
      if(!sessionData?.session){
          console.log('no session yet');
-         return
      }
     
      const displayName = username || data?.user.email.split('@')[0]
@@ -35,11 +34,74 @@ export const signUp = async (email , password , username="")=>{
         } 
 }
 
+
 export const signIn = async (email ,password)=>{
      
-let { data, error } = await supabase.auth.signInWithPassword({
-  email: 'someone@email.com',
-  password: 'QCzWVAtIGMupLpOqqNcK'
-})
+        let { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password
+        })
+ 
+    // we check our session 
+     const { data : sessionData } = await supabase.auth.getSession()
+      
+     if(!sessionData?.session){
+         console.log('no session yet');
+     }
+  
+   if(data?.user){
+        try {
+         await getUserinfo(data.user.id)
+     } catch (error) {
+        console.log('error happen in sign in', error);
+      }
+   }
+     
+}
+
+//reading if its user or not inserting user data
+export const getUserinfo = async (userId)=>{
+       
+      // we check our session 
+     const { data : sessionData } = await supabase.auth.getSession()
+      
+     if(!sessionData?.session){
+         console.log('no session yet in getuserInfo.');
+     }
+
+     const {data , error } = await supabase
+            .from('users')
+            .select('*')
+             .eq('id',userId)
+             .single()
+
+      if(error && error.code === 'PGRST116'){
+              
+        // we get the current user
+           const {data:userData} = await supabase.auth.getUser()
+         
+           const email = userData?.user.email;
+        //    display username 
+        const DisplayName = email ? email.split('@')[0] : "User"
+        // insert user in our users table 
+        const {data : profileData , error:profileError }  = await supabase
+              .from('users')
+              .insert({
+                 id:userId,
+                 username:DisplayName,
+                 avatar_url:null
+              })
+
+          if(profileError){
+            console.error('insert Profile Error:',profileError);
+          } else{
+             console.log('profile insert succesfully :',profileData);
+          }
+
+        return profileData
+      }   
+      
+      
+      return data
 
 }
