@@ -2,6 +2,8 @@ import { Route, Routes } from "react-router"
 import HomePage from "./pages/HomePage"
 import SignInPage from "./pages/SignInPage"
 import SignUpPage from "./pages/SignUpPage"
+import Header from "./components/Header"
+import Footer from "./components/Footer"
 
 
 function App() {
@@ -10,7 +12,8 @@ function App() {
   return (
     <div>
        {/* header */}
-        <main>
+       <Header />
+        <main >
           {/* routes */}
           <Routes>
              {/* public route */}
@@ -21,6 +24,7 @@ function App() {
           </Routes>
         </main>
        {/* Footer */}
+        <Footer />
     </div>
   )
 }
