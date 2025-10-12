@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { signUp } from "../lib/Auth";
 
 const SignUpPage = () => {
@@ -12,22 +12,47 @@ const SignUpPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
-
+  const Navigate = useNavigate()
    
   const handleSubmit = async  (event)=>{
      event.preventDefault()
-      
-     try {
+       
+      if(password !== confirmPassword){
+         setError('password do not match')
+      }
+   
+     try {  
+        setIsLoading(true)
            await signUp(email , password ,username)
+         setSuccess(true)
+          setTimeout(()=>{
+             Navigate('/signin')
+          },3000) 
+
      } catch (error) {
        console.error(error);
+     }finally{
+       setIsLoading(false)
      }
      
   }
 
+ 
 
-
-
+  if(success){
+   return (
+     <div className="h-70 flex justify-center items-center">
+        <div className="w-90 h-50 flex flex-col justify-center items-center bg-white shadow-lg rounded">
+           <div className='p-4 text-center'>
+               <h1 className="text-center text-green-500 font-bold text-4xl">✔️</h1>
+               <p className="font-bold text-2xl">Account Created!</p>
+               <p className='py-2 text-gray-900'>Your Account has been created successfully please check your email for verication</p>
+               <p className='py-2'>Redirecting to sign in pages in a few seconds...</p>
+           </div>
+        </div>
+      </div>
+   )  
+  }
 
 
 

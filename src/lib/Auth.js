@@ -34,3 +34,12 @@ export const signUp = async (email , password , username="")=>{
             console.log('success profile signUp:',profiledata);
         } 
 }
+
+export const signIn = async (email ,password)=>{
+     
+let { data, error } = await supabase.auth.signInWithPassword({
+  email: 'someone@email.com',
+  password: 'QCzWVAtIGMupLpOqqNcK'
+})
+
+}
