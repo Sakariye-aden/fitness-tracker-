@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router";
 
 const SignUpPage = () => {
+
+
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -9,6 +11,20 @@ const SignUpPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+
+   
+  const handleSubmit = (event)=>{
+     event.preventDefault()
+
+    
+  }
+
+
+
+
+
+
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -28,7 +44,7 @@ const SignUpPage = () => {
             </div>
           )}
 
-          <form >
+          <form  onSubmit={handleSubmit}>
             <div className="mb-6">
               <label
                 className="block text-gray-700 text-sm font-semibold mb-2"
