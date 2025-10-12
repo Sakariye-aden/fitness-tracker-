@@ -7,7 +7,7 @@ import { FaChevronRight } from "react-icons/fa6";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDrobDown, setIsDrobDown] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const avatar =
     "https://media.istockphoto.com/id/1404289793/photo/head-shot-portrait-attractive-30s-business-lady-pose-indoor.jpg?s=612x612&w=0&k=20&c=kqfG2KCmhf6t9w6vrT7-tHqhrio4ecS0UfpuwFe2nb4=";
@@ -102,7 +102,7 @@ const Header = () => {
                 <Link
                   to="/signup"
                   className="bg-transparent border-1 border-gray-400 font-bold px-4 py-2 rounded-md
-                           focus:outline-none focus:ring-2 focus:ring-orange-500 hover:bg-orange-500 hover:text-white focus:border-none 
+                           focus:outline-none focus:ring-2 focus:ring-orange-500 hover:bg-amber-400 hover:text-white focus:border-0 
                            duration-300 transition-all
                          "
                 >
