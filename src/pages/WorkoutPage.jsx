@@ -2,6 +2,8 @@ import React, { useRef, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
 import { UploadImage } from '../lib/storage'
+import supabase from '../lib/supabase'
+import { Navigate } from 'react-router'
 
 const WorkoutPage = () => {
         const [ExerciseName , setIsexerciseName]=useState('')
@@ -41,20 +43,25 @@ const handleChange = (e)=>{
     setAvatar(file)
 }
 
+let uploadphoto = false;
 // upload img 
 const handleUpload = async () => {
      
       setisUploading(true)
       try {
+          
      const   {url , path} =  await UploadImage(avatar,user.id)
       setAvatarUrl(url)
        toast.success('image succesfully uploaded.👋')
        //clear
+
+       uploadphoto = true
+
        setAvatar(null)
        if(InputRef.current){
          InputRef.current.value =""
        }
-       
+
       } catch (error) {
          console.error(error)
       }finally{
@@ -62,11 +69,66 @@ const handleUpload = async () => {
       }
 }
 
-
-  const handleSubmit = async (e)=>{
+  
+  const handleSubmit = async (e)=>{ 
       e.preventDefault()
+        
+      if(!uploadphoto){
+           //  we tell the user to upload img if he forgott upload
 
-    
+         const shouldUpload = confirm('you select image that you dont upload can i upload the image please...')
+
+         if(shouldUpload){
+            await handleUpload()
+         }else{
+            if(InputRef.current){
+               InputRef.current.value =''
+            }
+         }
+      }
+      
+      if(!user){
+         toast.error('please sign in frist')
+         return <Navigate  to="/signin" />
+      }
+      
+   
+
+     setisSaving(true)
+      console.log('inserting Exercise ....');
+     try {
+       
+        const ExerciseData = {
+            author_id :user.id,
+            exercise_name : ExerciseName,
+            exercise_type : isSelected,
+            reps  : isRepo,
+            duration : duration,
+            description : description,
+            feature_image : avatarUrl
+        }
+
+        
+        const {data , error} = await supabase
+               
+           .from('exercises')
+           .insert(ExerciseData)
+            .select()
+            .single()
+          
+        if(error){
+           console.error('insert exercise error:',error);
+        }else{
+          console.log('insert succesfully :',data);
+        }    
+
+
+
+     } catch (error) {
+       console.log('exercise insert error:',error);
+     }finally{
+      setisSaving(false)
+     }
   }
 
 
@@ -79,6 +141,7 @@ const handleUpload = async () => {
                  <h3 className='text-center font-medium text-3xl mb-2 font-mono'>work out Form  </h3>
                  <label htmlFor="name" className='text-lg text-gray-600 font-medium block my-3' > Exercise name
                     <input type="text"  
+                     required
                      id="name" 
                        className='block w-full border-2 p-1  rounded text-lg border-gray-300 outline-none focus:border-blue-400'
                        value={ExerciseName}
@@ -136,6 +199,7 @@ const handleUpload = async () => {
                 <div className='my-3'>
                    <label className='text-lg text-gray-600 font-medium block mb-1' >Duration</label>
                    <input type="text" 
+                    required
                      className='block w-full border-2 p-1 rounded text-xl border-gray-300 outline-none focus:border-blue-400'
                       value={duration}
                       onChange={(e)=>setIsDuration(e.target.value)}
