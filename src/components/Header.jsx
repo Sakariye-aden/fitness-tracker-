@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { Link } from "react-router";
 import { CiMenuBurger } from "react-icons/ci";
 import { MdClose } from "react-icons/md";
-import { FaChevronRight } from "react-icons/fa6";
+import { FaChevronRight, FaUser } from "react-icons/fa6";
 import { useAuth } from "../context/AuthContext";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDrobDown, setIsDrobDown] = useState(false);
-  const { user , profile ,isLoggedIn } =useAuth()
+  const { user , profile ,isLoggedIn , Logout } =useAuth()
 
   
 
@@ -65,11 +65,14 @@ const Header = () => {
                   className="relative"
                   onClick={() => setIsDrobDown(!isDrobDown)}
                 >
-                  <img
-                    src={profile?.avatar_url}
+                 {
+                   profile ? <img
+                    src={profile.avatar_url}
                     alt="avatat"
                     className="w-10 h-10 rounded-full object-cover"
                   />
+                  : <FaUser className="w-7 h-7 rounded-full text-rose-400" />
+                 } 
 
                   {isDrobDown && (
                     <div
@@ -82,7 +85,9 @@ const Header = () => {
                       <Link className="block font-medium text-gray-600">
                         Manage
                       </Link>
-                      <button className="block font-medium text-gray-600 cursor-pointer">
+                      <button className="block font-medium text-gray-600 cursor-pointer"
+                         onClick={()=> Logout()}
+                        >
                         Signout
                       </button>
                     </div>
@@ -163,7 +168,9 @@ const Header = () => {
                         >
                           chat
                         </Link>
-                        <button  className="text-lg font-medium text-gray-800   block w-full py-2 px-4  hover:bg-orange-50  border-b-1 border-gray-200  text-left ">
+                        <button  className="text-lg font-medium text-gray-800   block w-full py-2 px-4  hover:bg-orange-50  border-b-1 border-gray-200  text-left "
+                             onClick={()=> Logout()}
+                        >
                           Signout
                         </button>
                       </>
