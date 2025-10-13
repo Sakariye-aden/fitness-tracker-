@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
+import { useAuth } from '../context/AuthContext'
+import toast from 'react-hot-toast'
 
 const WorkoutPage = () => {
         const [ExerciseName , setIsexerciseName]=useState('')
@@ -12,8 +14,33 @@ const WorkoutPage = () => {
         const [avatar , setAvatar]=useState(null)
         const [avatarUrl , setAvatarUrl]=useState(null)
 
-
+       const InputRef = useRef()
+       const {user } = useAuth()
        
+//  onChange Input 
+const handleChange = (e)=>{
+    const file = e.target.files[0];
+   
+    if(file){
+      // check the file
+      // if(!file.name.startswith('img/')){
+      //   toast.error("please select image..")
+      //   return
+      // }
+
+      const maxsize = 2*1024* 1024 
+   
+      if(file.size > maxsize){
+         toast.error('heey your file to large..')
+         InputRef.current.value = ""
+         return
+      }
+    }
+
+    setAvatar(file)
+}
+
+
 
   const handleSubmit = async (e)=>{
       e.preventDefault()
@@ -43,7 +70,10 @@ const WorkoutPage = () => {
                    <input 
                     type="file" 
                       accept="image/*"
+                       onChange={handleChange}
+                       ref={InputRef}
                        className="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100"
+
                       />
                   <button className=" bg-orange-400 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-md focus:outline-none   focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50 transition duration-200  disabled:cursor-not-allowed"
                     disabled={isUploading}
