@@ -105,6 +105,14 @@ export const getUserinfo = async (userId)=>{
       return data
 
 }
+// signout 
+export const UserLogout = async ()=>{
+   
+let { error } = await supabase.auth.signOut()
+    
+  if(error) throw error
+}
+
 
 export const onAuthStateChange = (callback)=>{
     supabase.auth.onAuthStateChange((event , session)=>{
