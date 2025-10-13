@@ -12,8 +12,7 @@ const Header = () => {
 
   
 
-  const avatar =
-    "https://media.istockphoto.com/id/1404289793/photo/head-shot-portrait-attractive-30s-business-lady-pose-indoor.jpg?s=612x612&w=0&k=20&c=kqfG2KCmhf6t9w6vrT7-tHqhrio4ecS0UfpuwFe2nb4=";
+  
 
   return (
     <header className="bg-white shadow ">
@@ -34,19 +33,19 @@ const Header = () => {
               {isLoggedIn && (
                 <>
                   <Link
-                    to="/"
+                    to="/workout"
                     className="text-lg font-medium text-gray-800  border-b-2    border-transparent "
                   >
                     Workout
                   </Link>
                   <Link
-                    to="/"
+                    to="/progress"
                     className="text-lg font-medium text-gray-800  border-b-2  border-transparent "
                   >
                     Progress
                   </Link>
                   <Link
-                    to="/"
+                    to="/chat"
                     className="text-lg font-medium text-gray-800  border-b-2  border-transparent"
                   >
                     chat
@@ -77,7 +76,7 @@ const Header = () => {
                       className="absolute right-0 top-10 w-30 z-50 shadow-md rounded-md  bg-white p-2"
                       onMouseLeave={() => setIsDrobDown(!isDrobDown)}
                     >
-                      <Link className="block font-medium text-gray-600">
+                      <Link to="/profile" className="block font-medium text-gray-600">
                         Profile
                       </Link>
                       <Link className="block font-medium text-gray-600">
@@ -147,19 +146,19 @@ const Header = () => {
                 (
                     <>
                         <Link
-                          to="/"
+                          to="/workout"
                           className="text-lg font-medium text-gray-800 block py-2 px-4  hover:bg-orange-50 border-b-1 border-gray-200  "
                         >
                           Workout
                         </Link>
                         <Link
-                          to="/"
+                          to="/progress"
                           className="text-lg font-medium text-gray-800  block py-2 px-4  hover:bg-orange-50  border-b-1 border-gray-200  "
                         >
                           Progress
                         </Link>
                         <Link
-                          to="/"
+                          to="/chat"
                           className="text-lg font-medium text-gray-800   block py-2 px-4  hover:bg-orange-50  border-b-1 border-gray-200 "
                         >
                           chat

@@ -9,6 +9,9 @@ import { Toaster } from "react-hot-toast"
 import { AuthProvider } from "./context/AuthContext"
 import UnAuthenticated from "./components/UnAuthenticated"
 import ProtectedRoute from "./components/ProtectedRoute"
+import WorkoutPage from "./pages/WorkoutPage"
+import ProgressPage from "./pages/ProgressPage"
+import ChatPage from "./pages/ChatPage"
 
 
 function App() {
@@ -45,9 +48,30 @@ function App() {
                  <ProtectedRoute>
                       <Profile/> 
                  </ProtectedRoute>
-                }
-               
+                }      
                />
+               <Route path="/workout" 
+               element={
+                 <ProtectedRoute>
+                   <WorkoutPage />
+                 </ProtectedRoute>
+                 } 
+               />
+               <Route path="/progress" 
+               element={
+                 <ProtectedRoute>
+                   <ProgressPage />
+                 </ProtectedRoute>
+                 } 
+               />
+               <Route path="/chat" 
+               element={
+                 <ProtectedRoute>
+                   <ChatPage />
+                 </ProtectedRoute>
+                 } 
+               />
+               
           </Routes>
         </main>
        {/* Footer */}
