@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
+import { UploadImage } from '../lib/storage'
 
 const WorkoutPage = () => {
         const [ExerciseName , setIsexerciseName]=useState('')
@@ -40,6 +41,26 @@ const handleChange = (e)=>{
     setAvatar(file)
 }
 
+// upload img 
+const handleUpload = async () => {
+     
+      setisUploading(true)
+      try {
+     const   {url , path} =  await UploadImage(avatar,user.id)
+      setAvatarUrl(url)
+       toast.success('image succesfully uploaded.👋')
+       //clear
+       setAvatar(null)
+       if(InputRef.current){
+         InputRef.current.value =""
+       }
+       
+      } catch (error) {
+         console.error(error)
+      }finally{
+         setisUploading(false)
+      }
+}
 
 
   const handleSubmit = async (e)=>{
@@ -77,6 +98,14 @@ const handleChange = (e)=>{
                       />
                   <button className=" bg-orange-400 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-md focus:outline-none   focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50 transition duration-200  disabled:cursor-not-allowed"
                     disabled={isUploading}
+                      onClick={ async (params) => {
+                           try {
+                              await handleUpload()
+                           } catch (error) {
+                              console.error(error);    
+                           }
+                        } 
+                     }
                     >
                      
                       {isUploading ? 
