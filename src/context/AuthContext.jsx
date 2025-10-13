@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getUserinfo, onAuthStateChange } from "../lib/Auth";
+import { getUserinfo, onAuthStateChange, UserLogout } from "../lib/Auth";
 
 const AuthContext = createContext()
 
@@ -29,11 +29,18 @@ export const AuthProvider = ({children})=>{
 
     },[])
 
+
+     const Logout = async ()=>{
+        await UserLogout()
+     }
+
+
     const value = {
         user,
         profile ,
         isLoading,
-        isLoggedIn :!!user
+        isLoggedIn :!!user,
+        Logout
     }
 
     return (
