@@ -71,7 +71,6 @@ function App() {
                  </ProtectedRoute>
                  } 
                />
-               <Route path="/chat/:id" element={ <ChatPage /> } />
                
           </Routes>
         </main>
