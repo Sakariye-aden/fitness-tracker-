@@ -54,7 +54,7 @@ const ChatPage = () => {
     <div className='min-h-screen max-w-4xl mx-auto'>
       <div className=' grid grid-cols-3'>
          {/* left side */}
-          <div className='bg-gray-100 '>
+          <div className='bg-gray-100 h-screen'>
               <div className=''>
                 {/* profile */}
                  <div className='flex justify-between items-center p-2 sm:p-4'>
@@ -74,15 +74,15 @@ const ChatPage = () => {
                    <div className='bg-gray-400 p-0.5 rounded-md my2'></div>
                   {/* current users  */}
                   <h2 className='text-xl font-medium '>Current Users</h2>
-                  <div className='p-2 sm:p-4'>
+                  <div className='p-2 sm:p-4 flex flex-col space-y-3'>
                      {
                       currentUsers.map((current)=>(
                         <Link key={current.id} 
                           to={'/'}
-                           className='mb-3'
+                           className=''
                            onClick={()=>getUserId(current)} 
                          >
-                           <div className='flex space-x-3 items-center'>
+                           <div className='flex space-x-1 items-center'>
                               <img src={current.avatar_url} alt="userimage" className='h-15 w-15 rounded-full'/>
                               
                              <div className='flex justify-between'>
@@ -96,8 +96,8 @@ const ChatPage = () => {
               </div>
           </div>
          {/* right side */}
-          <div className='col-span-2 bg-rose-100'>
-             cool
+          <div className='col-span-2 '>
+             
           </div>
       </div>
     </div>
