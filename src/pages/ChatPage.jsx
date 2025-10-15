@@ -84,7 +84,7 @@ const ChatPage = () => {
             <div className="p-2 sm:p-4 flex flex-col space-y-3">
               {currentUsers.map((current) => (
                 <div key={current.id} onClick={() => handleClick(current)}>
-                  <div className="flex space-x-1 items-center">
+                  <div className="flex space-x-1 items-center cursor-pointer">
                     <img
                       src={current.avatar_url}
                       alt="userimage"
@@ -122,7 +122,7 @@ const ChatPage = () => {
             <div className="p-2 sm:p-4 flex flex-col space-y-6">
               {currentUsers.map((current) => (
                 <div key={current.id} onClick={() => handleClick(current)}>
-                  <div className="flex space-x-3 items-center">
+                  <div className="flex space-x-3 items-center cursor-pointer">
                     <img
                       src={current.avatar_url}
                       alt="userimage"
