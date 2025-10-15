@@ -2,21 +2,45 @@ import React, { useState } from 'react'
 import { FaArrowLeft } from 'react-icons/fa'
 import { IoSend } from 'react-icons/io5'
 import { Link } from 'react-router'
+import { useAuth } from '../context/AuthContext'
+import supabase from '../lib/supabase'
 
 const ChatUser = ({userInfo}) => {
 
    const [message , setMassege]= useState('')
+   const [isSaving , setisSaving]= useState(false)
+    
+   const { user } = useAuth()
 
-    const handleSubmit = (e)=>{
+    const handleSubmit = async (e)=>{
        e.preventDefault();
+           
+          setisSaving(true)
 
-       console.log(message);
+             try {
+
+              const {data , error } = await supabase
+                  .from('chat')
+                  .insert({
+                     sender_id:user.id,
+                     receiver_id:userInfo.id,
+                     message:message
+                  })
+                  
+
+                  if(error) throw error
+
+             } catch (error) {
+                 console.error('inser error :',error);
+             }finally{
+              setisSaving(false)
+             }     
     }
 
 
 
   return (
-    <div className='bg-white '>
+    <div className='bg-white border-r-1 border-gray-300'>
        <div className='flex flex-col min-h-screen '>
          {/* Top  */}
           <div className=''>
@@ -42,8 +66,12 @@ const ChatUser = ({userInfo}) => {
                      onChange={(e)=>setMassege(e.target.value)}
                      value={message}
                    />
-                   <button type='submit' className='ml-2 '>
-                        <IoSend  className='text-xl'/>
+                   <button type='submit' className='ml-2 border-1 border-gray-400 p-2 px-4 rounded-lg'>
+                     {
+                       isSaving ? <div className='animate-spin h-5 w-5 border-l-1 border-orange-500 border-r-1 rounded-full'></div>
+                       : <IoSend  className='text-xl'/>
+                     }
+                       
                    </button>
                 </form>
             </div>
