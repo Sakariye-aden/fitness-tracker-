@@ -3,10 +3,12 @@ import React, { useEffect, useState } from 'react'
  import { Chart as Chartjs } from 'chart.js/auto'
 import { useAuth } from '../context/AuthContext'
 import supabase from '../lib/supabase'
+import { FetchLatestExercise } from '../lib/exercise'
 
 const ProgressPage = () => {
      
     const [userData , setUserData] = useState([]);
+    const [recentExercise , setRecentExercise] = useState([]);
 
 
     const {user , isLoading } = useAuth()
@@ -32,24 +34,34 @@ const ProgressPage = () => {
            }
          
            fetchExercises()
+          //  get Recent Active 
+          const getRecentActvity = async ()=>{
+             try {
+               const result = await FetchLatestExercise(user.id , 3 )
+
+                console.log('result :',result);
+                setRecentExercise(result || [])
+             } catch (error) {
+               console.log(error);
+             }
+          }
+
+          getRecentActvity()
           
     },[user.id])
 
 
   
 
-    const TotalReps = userData.reduce(Sum,0)
-
-      function Sum (prev , next){
-         return prev + next.reps
-      }
-    console.log(TotalReps);
-
+    const TotalReps = userData.reduce((prev , next)=>{
+        return prev + next.reps
+      },0)
+      
+ 
     const TotalDuration = userData.reduce((prev, next)=>{
          return prev + next.duration 
     },0)
-    
-    console.log(TotalDuration);
+   
 
 
   return (
