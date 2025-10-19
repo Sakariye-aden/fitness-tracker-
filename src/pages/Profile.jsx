@@ -17,6 +17,7 @@ const Profile = () => {
 
       useEffect(()=>{
           const fetch = async ()=>{
+             setIsLoading(true)
               try {
                 const {username, avatar_url}= await getUserinfo(user.id)
                  
@@ -27,6 +28,8 @@ const Profile = () => {
                 
               } catch (error) {
                  console.error(error);
+              }finally{
+                setIsLoading(false)
               }
           }
           fetch()
@@ -96,9 +99,20 @@ const Profile = () => {
       } 
    }
 
+
+   if(isLoading){
+       return (
+        <div className="flex justify-center items-center min-h-screen">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
+        </div>
+      )
+    }
+
+
+
   return (
-    <div className='min-h-screen bg-gray-100 p-4'>
-        <div className='w-1/2 h-full  bg-white mx-auto mt-4 border border-gray-50 rounded-lg shadow'>
+    <div className='min-h-screen bg-gray-100 px-8 py-4'>
+        <div className='max-w-180 h-full  bg-white mx-auto mt-4 border border-gray-50 rounded-lg shadow'>
             <div className='bg-orange-300 h-70 rounded-lg'>
               <div className='pt-3 flex flex-col items-center '>
                   <img src={avatarUrl || 'user'} alt="img" className='h-30 w-30 rounded-full object-cover '/>
