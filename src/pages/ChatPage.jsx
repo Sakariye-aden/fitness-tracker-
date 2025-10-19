@@ -12,13 +12,15 @@ const ChatPage = () => {
   const [message, setMessage] = useState("");
   const [userData, setUserData] = useState(null);
   const [isOpen, setisOpen] = useState(false);
+  const [isLoading , setIsloading] = useState(false)
 
-  const { user, profile, isLoading } = useAuth();
+  const { user, profile } = useAuth();
 
   const { id } = useParams();
 
   useEffect(() => {
     const fetchUser = async () => {
+       setIsloading(true)
       try {
         const { data, error } = await supabase
           .from("users")
@@ -31,6 +33,8 @@ const ChatPage = () => {
         // console.log(data);
       } catch (error) {
         console.error(error);
+      }finally{
+        setIsloading(false)
       }
     };
     fetchUser();
@@ -47,7 +51,7 @@ const ChatPage = () => {
       <div className="flex justify-center items-center min-h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
       </div>
-    );
+    )
   }
 
 

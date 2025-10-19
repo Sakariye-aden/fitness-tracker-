@@ -6,20 +6,22 @@ import supabase from '../lib/supabase'
 import { FetchLatestExercise } from '../lib/exercise'
 import { GiTrophyCup } from 'react-icons/gi'
 import { BsStars } from 'react-icons/bs'
+import { Link } from 'react-router'
 
 const ProgressPage = () => {
      
     const [userData , setUserData] = useState([]);
     const [recent , setRecent] = useState([]);
+    const [isLoading , setIsloading]= useState(false)
 
-
-    const {user , isLoading } = useAuth()
+    const {user } = useAuth()
 
     useEffect(()=>{
 
           //  fetch All exercises
            const fetchExercises = async () =>{
               
+              setIsloading(true)
               try {
                  const {data , error}= await supabase.from('exercises')
                              .select('*')
@@ -32,6 +34,8 @@ const ProgressPage = () => {
                      setUserData(data || []) 
               } catch (error) {
                  console.error(error);
+              }finally{
+                setIsloading(false)
               }
            }
          
@@ -76,8 +80,33 @@ const ProgressPage = () => {
     const TotalDuration = userData.reduce((prev, next)=>{
          return prev + next.duration 
     },0)
+
+    if(isLoading){
+       return (
+        <div className="flex justify-center items-center min-h-screen">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
+        </div>
+    )
+    }
    
- 
+
+
+     if(userData.length == 0 ){
+      return (
+          <div className='flex flex-col items-center mt-20 min-h-screen text-center'>
+              <h2 className='text-2xl font-semibold my-2'>No progress yet..</h2>
+              <p className='text-gray-500 mb-4 px-4'>you haven't logged any workouts yet. start your frist session now!</p>
+              <Link to={'/workout'} className='bg-orange-500 text-white px-4 py-2 rounded-lg shadow hover:bg-orange-600 transition'>
+                Go to workout Page
+              </Link>
+            </div>
+      )
+     }
+
+
+
+     
+
   return (
  
        <div className='min-h-screen bg-gray-50'>
@@ -95,7 +124,6 @@ const ProgressPage = () => {
                    <option value="All">All time</option>
                  </select>
                </div>
-
                {/* cards */}
                <div className='grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 mx-10 md:mx-6 my-6'>
                   <div className='flex flex-col space-y-1 items-center bg-white py-2 rounded'>
