@@ -4,18 +4,20 @@ import React, { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import supabase from '../lib/supabase'
 import { FetchLatestExercise } from '../lib/exercise'
+import { GiTrophyCup } from 'react-icons/gi'
+import { BsStars } from 'react-icons/bs'
 
 const ProgressPage = () => {
      
     const [userData , setUserData] = useState([]);
-    const [recentExercise , setRecentExercise] = useState([]);
+    const [recent , setRecent] = useState([]);
 
 
     const {user , isLoading } = useAuth()
 
     useEffect(()=>{
 
-
+          //  fetch All exercises
            const fetchExercises = async () =>{
               
               try {
@@ -34,13 +36,15 @@ const ProgressPage = () => {
            }
          
            fetchExercises()
+
           //  get Recent Active 
           const getRecentActvity = async ()=>{
              try {
                const result = await FetchLatestExercise(user.id , 3 )
 
-                console.log('result :',result);
-                setRecentExercise(result || [])
+                // console.log('result :',result);
+                setRecent(result || [])
+               
              } catch (error) {
                console.log(error);
              }
@@ -48,26 +52,36 @@ const ProgressPage = () => {
 
           getRecentActvity()
           
-    },[user.id])
+    },[])
 
 
-  
+     
+   const getDifferentColor= (color)=>{
+     switch(color){
+       case 'Beginner':
+         return 'bg-blue-200  font-medium '
+       case 'Intermediate':
+         return 'bg-yellow-100 font-medium '
+       case 'Advanced':
+         return 'bg-green-200 font-medium '
+     }
+   }
 
+// TotalReps
     const TotalReps = userData.reduce((prev , next)=>{
         return prev + next.reps
       },0)
       
- 
+//  Total Duration
     const TotalDuration = userData.reduce((prev, next)=>{
          return prev + next.duration 
     },0)
    
-
-
+ 
   return (
  
        <div className='min-h-screen bg-gray-50'>
-          <div className='max-w-4xl mx-auto'>
+          <div className='max-w-4xl mx-auto min-h-screen'>
                {/* header */}
                <div>
                   <h1 className='p-2 text-gray-700 text-3xl font-bold'>Your Progress</h1>
@@ -173,9 +187,43 @@ const ProgressPage = () => {
                    </div>
                 </div>
                 {/* Recently */}
-                <div className='p-2'>
-                   <h2 className='text-xl text-gray-800 font-medium'>Recent Activity</h2>
-                   
+                <div className='p-2 mx-6 bg-white rounded shadow-md'>
+                   <h2 className='text-xl text-gray-800 font-medium px-2'>Recent Activity</h2>
+                   <div className='my-4 '>
+                      {
+                        recent.map((item)=>(
+                          <div key={item.id} className='flex justify-between items-center py-2 px-2'>
+                            <div className='flex space-x-2 '>
+                               <img src={item.feature_image} alt="photo"  className='h-13 w-15  object-cover rounded-md'/>
+                               <div className=''>
+                                  <span className='block font-medium '>{item.exercise_name}</span>
+                                  <span className='text-sm text-gray-800'>{item.reps} reps - {item.duration} sec</span>
+                               </div>
+                            </div>
+                             <div>
+                               <button className={`py-1 px-3 rounded-md ${getDifferentColor(item.exercise_type)}`}>
+                                {item.exercise_type}
+                               </button>
+                             </div>
+                          </div>
+                        ))  
+                      }
+                   </div> 
+                </div>
+
+                {/* acheivements */}
+                <div className='p-2 mx-6 my-4 bg-white rounded shadow-md'>
+                     <h2 className='text-xl text-gray-800 font-medium px-2'>Achievements</h2>
+                   <div className='flex flex-col space-y-6 md:flex-row md:space-x-15  p-2 my-4 '>
+                      <div className='flex space-x-2'>
+                        <GiTrophyCup className='text-amber-400 text-2xl'/> 
+                        <span className='text-gray-800 font-medium text-md'>Completed 10 workouts! </span>
+                      </div>
+                      <div className='flex space-x-2'>
+                        <BsStars className='text-amber-400 text-2xl'/>
+                         <span className='text-gray-800 font-medium text-md' >100 reps milestone reached!</span>          
+                      </div>
+                   </div> 
                 </div>
           </div>
        </div>
