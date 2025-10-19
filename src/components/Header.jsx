@@ -50,6 +50,12 @@ const Header = () => {
                   >
                     chat
                   </Link>
+                  <Link
+                    to="/manage"
+                    className="text-lg font-medium text-gray-800  border-b-2  border-transparent"
+                  >
+                    manage
+                  </Link>
                 </>
               )}
             </nav>
@@ -82,7 +88,7 @@ const Header = () => {
                       <Link to="/profile" className="block font-medium text-gray-600">
                         Profile
                       </Link>
-                      <Link className="block font-medium text-gray-600">
+                      <Link to='manage' className="block font-medium text-gray-600">
                         Manage
                       </Link>
                       <button className="block font-medium text-gray-600 cursor-pointer"
@@ -167,6 +173,12 @@ const Header = () => {
                           className="text-lg font-medium text-gray-800   block py-2 px-4  hover:bg-orange-50  border-b-1 border-gray-200 "
                         >
                           chat
+                        </Link>
+                        <Link
+                          to="/manage"
+                          className="text-lg font-medium text-gray-800   block py-2 px-4  hover:bg-orange-50  border-b-1 border-gray-200 "
+                        >
+                          manage
                         </Link>
                         <button  className="text-lg font-medium text-gray-800   block w-full py-2 px-4  hover:bg-orange-50  border-b-1 border-gray-200  text-left "
                              onClick={()=> Logout()}

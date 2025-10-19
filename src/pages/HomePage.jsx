@@ -1,15 +1,37 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router';
 import { useAuth } from '../context/AuthContext';
+import { FetchLatestExercise } from '../lib/exercise';
 
 const HomePage = () => {
 
  const [quote] = useState("Every step counts. Keep moving!");
+ const [recent , setIsRecent]= useState([])
  
+   const { user, isLoading }=useAuth();
+
+  useEffect(()=>{
+           
+            //  get Recent Active 
+                 const getRecentActvity = async ()=>{
+                    try {
+                      const result = await FetchLatestExercise(user.id , 3 )
+       
+                       // console.log('result :',result);
+                       setIsRecent(result || [])
+                      
+                    } catch (error) {
+                      console.log(error);
+                    }
+                 }
+       
+                 getRecentActvity()
+  },[])
 
 
 
-   const { isLoading }=useAuth();
+
+    console.log(recent);
 
    
     if(isLoading){
@@ -20,7 +42,8 @@ const HomePage = () => {
     )
     }
 
-    
+
+
 
 
 

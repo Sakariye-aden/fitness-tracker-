@@ -12,6 +12,7 @@ import ProtectedRoute from "./components/ProtectedRoute"
 import WorkoutPage from "./pages/WorkoutPage"
 import ProgressPage from "./pages/ProgressPage"
 import ChatPage from "./pages/ChatPage"
+import ManagePage from "./pages/ManagePage"
 
 
 function App() {
@@ -68,6 +69,13 @@ function App() {
                element={
                  <ProtectedRoute>
                    <ChatPage />
+                 </ProtectedRoute>
+                 } 
+               />
+               <Route path="/manage" 
+               element={
+                 <ProtectedRoute>
+                   <ManagePage />
                  </ProtectedRoute>
                  } 
                />
