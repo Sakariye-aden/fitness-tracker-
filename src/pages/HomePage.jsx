@@ -1,7 +1,28 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router';
+import { useAuth } from '../context/AuthContext';
 
 const HomePage = () => {
+
  const [quote] = useState("Every step counts. Keep moving!");
+ 
+
+
+
+   const { isLoading }=useAuth();
+
+   
+    if(isLoading){
+       return (
+        <div className="flex justify-center items-center min-h-screen">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
+        </div>
+    )
+    }
+
+    
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-blue-100 text-gray-800 font-sans">
@@ -10,8 +31,8 @@ const HomePage = () => {
         <h1 className="text-4xl md:text-5xl font-bold mb-4">Track Your Fitness. Transform Your Life.</h1>
         <p className="text-lg md:text-xl mb-6">Stay motivated, monitor progress, and reach your goals.</p>
         <div className="flex justify-center gap-4">
-          <button className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">Start Tracking</button>
-          <button className="bg-white border border-blue-600 text-blue-600 px-6 py-2 rounded hover:bg-blue-50 transition">View Progress</button>
+          <Link to='workout' className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">Start Tracking</Link>
+          <Link to='progress' className="bg-white border border-blue-600 text-blue-600 px-6 py-2 rounded hover:bg-blue-50 transition">View Progress</Link>
         </div>
       </section>
 
