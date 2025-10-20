@@ -44,10 +44,10 @@ const ProgressPage = () => {
           //  get Recent Active 
           const getRecentActvity = async ()=>{
              try {
-               const result = await FetchLatestExercise(user.id , 3 )
+               const {data} = await FetchLatestExercise(user.id , 3 )
 
                 // console.log('result :',result);
-                setRecent(result || [])
+                setRecent(data || [])
                
              } catch (error) {
                console.log(error);

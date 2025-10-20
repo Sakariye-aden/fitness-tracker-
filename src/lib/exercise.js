@@ -11,6 +11,16 @@ export const FetchLatestExercise = async (id, limit=10 , offset=0)=>{
 
            if(error) throw error
            
+          const {data:count } = await supabase
+                  .from('exercises')
+                  .select('count')
+                  .eq('author_id',id)
 
-       return data    
+                 console.log('count',count[0].count); 
+
+
+       return {
+          data ,
+          count
+       }
 }
