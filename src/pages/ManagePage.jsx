@@ -1,7 +1,7 @@
 import React, { useEffect, useOptimistic, useState } from 'react'
 import { LuPlus } from 'react-icons/lu'
 import { Link, useNavigate } from 'react-router'
-import { FetchLatestExercise } from '../lib/exercise'
+import { DeleteExercise, FetchLatestExercise } from '../lib/exercise'
 import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
 import { useTransition } from 'react'
@@ -32,7 +32,7 @@ const ManagePage = () => {
              navigate('/signin')
            }
 
-     },[user])
+     },[user]) 
 
     const fetchUserArticles = async () => {
 
@@ -65,9 +65,19 @@ const ManagePage = () => {
 
          setIsDeleting(true)
         try {
-          
+            //  delete state 
+            startTransition(()=> updateOptimisticArticles(articleToDelete))
+
+            await DeleteExercise(articleToDelete.id)
+
+            setArticles((prev)=> prev.filter(item=>item.id !== articleToDelete.id))
+            setTotalCount((prev)=> prev - 1)
         } catch (error) {
-            
+            console.error('delete Error',error);
+            fetchUserArticles()
+        }finally{
+            setIsDeleting(false)
+            setArticleToDelete(null)
         }
      }
    

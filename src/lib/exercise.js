@@ -24,3 +24,15 @@ export const FetchLatestExercise = async (id, limit=10 , offset=0)=>{
           count
        }
 }
+
+
+// exercise delete 
+export const DeleteExercise = async (id)=>{
+   
+    const { error }= await supabase
+        .from('exercises')
+        .delete()
+        .eq('id',id)
+
+        if(error) throw error
+}
