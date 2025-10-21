@@ -5,7 +5,7 @@ import { FetchLatestExercise } from '../lib/exercise'
 import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
 import { useTransition } from 'react'
-import { FiEdit2, FiEye, FiTrash2 } from 'react-icons/fi'
+import { FiEdit2, FiEye, FiLoader, FiTrash2 } from 'react-icons/fi'
 
 const ManagePage = () => {
 
@@ -56,9 +56,24 @@ const ManagePage = () => {
         }
 
     }
+ 
+    const confirmDelete = (article)=>{
+        setArticleToDelete(article)
+    }
+ 
+     const handleDelete = async()=>{
 
-
+         setIsDeleting(true)
+        try {
+          
+        } catch (error) {
+            
+        }
+     }
    
+     const cancelDelete = ()=>{
+        setArticleToDelete(null)
+     }
 
 
     const formatDate = (dateString) => {
@@ -199,7 +214,7 @@ const ManagePage = () => {
                                                             <div className="flex justify-end space-x-2">
 
                                                                 <Link
-                                                                    // to={`/editor/${article.id}`}
+                                                                    to={`/workout/${article.id}`}
                                                                     className="p-2 text-orange-900 hover:text-orange-800 rounded-full hover:bg-orange-50"
                                                                     title="Edit Article"
                                                                 >
@@ -208,7 +223,7 @@ const ManagePage = () => {
 
 
                                                                 <button
-                                                                    // onClick={() => confirmDelete(article)}
+                                                                    onClick={() => confirmDelete(article)}
                                                                     className="p-2 text-red-600 hover:text-red-800 rounded-full hover:bg-red-50 cursor-pointer"
                                                                     title="Delete Article"
                                                                 >
@@ -234,6 +249,53 @@ const ManagePage = () => {
                     </div>
                 )} </div>
 
+                {/* delete confirmation modal */}
+
+            {articleToDelete && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                    <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
+                        <h3 className="text-xl font-bold text-gray-900 mb-4">Confirm Deletion</h3>
+                        <p className="text-gray-600 mb-6">
+                            Are you sure you want to delete "{articleToDelete.exercise_name || 'Untitled Article'}"?
+                            This action cannot be undone.
+                        </p>
+
+
+                        <div className="flex justify-end space-x-3">
+                            <button
+                                onClick={cancelDelete}
+                                disabled={isDeleting}
+                                className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200"
+                            >
+                                Cancel
+                            </button>
+
+
+
+
+                            <button
+                                onClick={handleDelete}
+                                // disabled={isDeleting}
+                                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200 flex items-center"
+                            >
+                                {isDeleting ? (
+                                    <>
+                                        <FiLoader className="animate-spin mr-2" />
+                                        Deleting...
+                                    </>
+                                ) : (
+                                    <>
+                                        <FiTrash2 className="mr-2" />
+                                        Delete
+                                    </>
+                                )}
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+            )}
    </div>
   )
 }

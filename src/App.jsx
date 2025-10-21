@@ -58,6 +58,13 @@ function App() {
                  </ProtectedRoute>
                  } 
                />
+               <Route path="/workout/:id" 
+               element={
+                 <ProtectedRoute>
+                   <WorkoutPage />
+                 </ProtectedRoute>
+                 } 
+               />
                <Route path="/progress" 
                element={
                  <ProtectedRoute>
