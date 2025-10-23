@@ -143,7 +143,9 @@ const Header = () => {
        {
         isMenuOpen &&
          (
-           <div className="sm:hidden absolute top-16 h-56 w-full bg-white">
+           <div className="sm:hidden absolute top-16 h-56 w-full bg-white" 
+              onClick={()=>setIsMenuOpen(false)}
+           >
           
               {/* navigation */}
               <Link

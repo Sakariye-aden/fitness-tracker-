@@ -3,10 +3,20 @@ import { Link } from 'react-router';
 import { useAuth } from '../context/AuthContext';
 import { FetchLatestExercise } from '../lib/exercise';
 
+
+
+const Daily = [
+          { label: "Steps", value: "8,420" },
+          { label: "Calories", value: "560 kcal" },
+          { label: "Active Minutes", value: "42 min" },
+          { label: "Water Intake", value: "2.5 L" },
+]
+
 const HomePage = () => {
 
  const [quote] = useState("Every step counts. Keep moving!");
  const [recent , setIsRecent]= useState([])
+
  
    const { user, isLoading }=useAuth();
 
@@ -61,12 +71,7 @@ const HomePage = () => {
 
       {/* Daily Summary */}
       <section className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 py-10 px-4">
-        {[
-          { label: "Steps", value: "8,420" },
-          { label: "Calories", value: "560 kcal" },
-          { label: "Active Minutes", value: "42 min" },
-          { label: "Water Intake", value: "2.5 L" },
-        ].map((item) => (
+        {Daily.map((item) => (
           <div key={item.label} className="bg-white rounded-lg shadow-md p-4 text-center">
             <h3 className="text-xl font-semibold">{item.value}</h3>
             <p className="text-sm text-gray-500">{item.label}</p>
