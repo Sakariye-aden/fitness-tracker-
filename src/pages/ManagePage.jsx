@@ -5,7 +5,7 @@ import { DeleteExercise, FetchLatestExercise } from '../lib/exercise'
 import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
 import { useTransition } from 'react'
-import { FiEdit2, FiEye, FiLoader, FiTrash2 } from 'react-icons/fi'
+import { FiEdit2, FiEye, FiLoader, FiPlus, FiTrash2 } from 'react-icons/fi'
 
 const ManagePage = () => {
 
@@ -140,16 +140,16 @@ const ManagePage = () => {
                         <div className="mx-auto w-24 h-24 bg-orange-100 rounded-full flex items-center justify-center mb-6">
                             <FiPlus className="h-10 w-10 text-orange-600" />
                         </div>
-                        <h2 className="text-2xl font-bold text-gray-900 mb-2">No Articles Yet</h2>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-2">No workout Yet</h2>
                         <p className="text-gray-500 max-w-md mx-auto mb-8">
-                            You haven't created any articles yet. Start writing your first article and share your knowledge!
+                            You haven't created any workout yet. Start writing your first article and share your knowledge!
                         </p>
                         <Link
                             to="/workout"
                             className="inline-flex items-center px-6 py-3 bg-orange-600 text-white rounded-xl shadow-md hover:bg-orange-700 transition-colors duration-200"
                         >
                             <FiPlus className="mr-2" />
-                            Create Your First Article
+                            Create Your First workout
                         </Link>
                     </div>
                 ) : (

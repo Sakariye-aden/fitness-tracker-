@@ -36,3 +36,58 @@ export const DeleteExercise = async (id)=>{
 
         if(error) throw error
 }
+
+// exercise Update 
+export const  UpdateExercises = async (exercise, id)=>{
+   
+   const Update = {
+       author_id :exercise.author_id,
+       exercise_name : exercise.exercise_name,
+       exercise_type : exercise.exercise_type,
+       reps : exercise.reps,
+       duration : exercise.duration,
+       description : exercise.description,
+       feature_image : exercise.feature_image 
+   }
+
+  const { data , error } = await supabase
+          .from('exercises')
+          .update(Update)
+          .eq('id',id)
+
+      if(error) throw error
+      
+   
+}
+
+// exercise Insert 
+export const InsertExercise = async (exercise)=>{
+   
+
+   const {data , error}= await supabase
+        .from('exercises')
+        .insert(exercise)
+        .select()
+        .single()
+
+    if(error) throw error
+
+    console.log('insert Data :',data);
+}
+
+//fetch exercises 
+
+export const FetchSingleExercise = async (id)=>{
+
+    const { data , error}= await supabase
+           .from('exercises')
+           .select('*')
+           .eq('id',id)
+           .single()
+
+      if(error) throw error 
+      
+      console.log('data',data)
+
+    return data    
+}
