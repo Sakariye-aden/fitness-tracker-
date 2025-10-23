@@ -20,6 +20,8 @@ const ChatUser = ({ userInfo }) => {
     FetchAll();
 
     if(!userInfo.id && !user) return  
+    
+     
 
     //  getTheSenderData()
     // getTheRecieverData()
@@ -44,22 +46,40 @@ const ChatUser = ({ userInfo }) => {
      RealtimeSupabase();
 
      //clean up an existing chanels
-     supabase.getChannels().forEach((channel)=>{
-       console.log('found channel :',channel.topic)
-       supabase.removeChannel(channel)
-     })
+    //  supabase.getChannels().forEach((channel)=>{
+    //    console.log('found channel :',channel.topic)
+    //    supabase.removeChannel(channel)
+    //  })
     // create channel 
     const ChatChanel = supabase.channel(`chat-${user.id}`) 
       // listen Events 
-      .on('postgres_changes',{
-         event:"INSERT",
-         schema:'public',
-         table:'chat'
-      },
-       payload=>{
-         console.log('inser Event:',payload);
-         setAllSMS((prev)=>[...prev, payload.new])
-      }).subscribe((status)=>{
+      .on( 'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat',
+          filter: `receiver_id=eq.${user.id}`,
+        },
+        (payload) => {
+          console.log('📥 Received message:', payload);
+          const newMessage = payload.new;
+          setAllSMS((prev) => [...prev, newMessage]);
+        }
+      )
+      .on('postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat',
+          filter: `sender_id=eq.${user.id}`,
+        },
+        (payload) => {
+          console.log('📤 Sent message:', payload);
+          const newMessage = payload.new;
+          setAllSMS((prev) => [...prev, newMessage]);
+        }
+      )  
+     .subscribe((status)=>{
          console.log('subscribtion status:',status);
       })
 
@@ -135,7 +155,7 @@ const ChatUser = ({ userInfo }) => {
     <div className="bg-white border-r-1 border-gray-300">
       <div className="flex flex-col min-h-screen ">
         {/* Top  */}
-        <div className="">
+        <div className="border-b-1 border-gray-500">
           <div className="h-15 flex items-center p-6 ">
             {/* profile */}
             <img
@@ -148,7 +168,7 @@ const ChatUser = ({ userInfo }) => {
             </span>
             <span className="block w-3 h-3 mt-0.5 rounded-full bg-green-500"></span>
           </div>
-          <div className="bg-gray-300 h-0.5  rounded-md my-1"></div>
+          {/* <div className="bg-gray-300 h-0.5  rounded-md my-1"></div> */}
         </div>
 
         {/*Messagess text  */}
@@ -157,7 +177,7 @@ const ChatUser = ({ userInfo }) => {
           <div className="">
              {
                allSMS.map((item)=>(
-                 <div className={`flex ${item.sender_id == user.id ? 'justify-end':'justify-start '}`}>
+                 <div className={`px-2 flex ${item.sender_id == user.id ? 'justify-end':'justify-start '}`}>
                    {item.sender_id === user.id &&
                      <div className="w-full p-2 flex justify-end  space-x-2  relative ">
                        <p className="p-1 text-white max-w-60 bg-blue-700  rounded-bl-md rounded-tr-md rounded-l-md mr-5">{item.message}</p>
