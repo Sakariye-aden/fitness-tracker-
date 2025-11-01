@@ -40,11 +40,11 @@ const ChatUser = ({ userInfo }) => {
       }
      RealtimeSupabase();
 
-     //clean up an existing chanels
-    //  supabase.getChannels().forEach((channel)=>{
-    //    console.log('found channel :',channel.topic)
-    //    supabase.removeChannel(channel)
-    //  })
+    //  clean up an existing chanels
+     supabase.getChannels().forEach((channel)=>{
+       console.log('found channel :',channel.topic)
+       supabase.removeChannel(channel)
+     })
     // create channel 
     const ChatChanel = supabase.channel(`chat-${user.id}`) 
       // listen Events 
@@ -53,21 +53,13 @@ const ChatUser = ({ userInfo }) => {
         {
           event: 'INSERT',
           schema: 'public',
-          table: 'chat'    
+          table: 'chat',
+          filter:`receiver_id=eq.${userInfo.id}`  
         },
         (payload) => {
           console.log('📤 Sent message:', payload);
-           const newMessage = payload.new;
-            const isRelevant =
-              (newMessage.sender_id === user.id && newMessage.receiver_id === userInfo.id) ||
-              (newMessage.sender_id === userInfo.id && newMessage.receiver_id === user.id);
-
-            if (isRelevant) {
-              setAllSMS((prev) => [...prev, newMessage]);
-              console.log('📥 New message received:', newMessage);
-            }
-
-          
+           const newMassage = payload.new
+           setAllSMS((prev)=> ([...prev, newMassage]))   
         }
       )  
      .subscribe((status)=>{
