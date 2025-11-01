@@ -58,7 +58,7 @@ const ChatUser = ({ userInfo }) => {
           console.log('📤 Sent message:', payload);
            const newMassage = payload.new
 
-          if (newMassage.sender_id === user.id) {
+          if (newMassage.receiver_id === userInfo.id) {
           setAllSMS((prev) => [...prev, newMassage]);
           console.log('📥 Received message:', newMassage);
           }
