@@ -46,22 +46,25 @@ const ChatUser = ({ userInfo }) => {
        supabase.removeChannel(channel)
      })
     // create channel 
-    const ChatChanel = supabase.channel(`chat-${user.id}`) 
-      // listen Events 
-  
-      .on('postgres_changes',
-        {
+    const ChatChanel = supabase
+      .channel(`chat-${user.id}`) 
+       // listen Events 
+       .on('postgres_changes',{
           event: 'INSERT',
           schema: 'public',
-          table: 'chat',
-          filter:`receiver_id=eq.${userInfo.id}`  
+          table: 'chat'
         },
         (payload) => {
           console.log('📤 Sent message:', payload);
            const newMassage = payload.new
-           setAllSMS((prev)=> ([...prev, newMassage]))   
+
+          if (newMassage.sender_id === user.id) {
+          setAllSMS((prev) => [...prev, newMassage]);
+          console.log('📥 Received message:', newMassage);
+          }
+      
         }
-      )  
+       )  
      .subscribe((status)=>{
          console.log('subscribtion status:',status);
       })
