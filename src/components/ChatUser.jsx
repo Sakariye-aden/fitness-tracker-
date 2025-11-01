@@ -157,7 +157,8 @@ const ChatUser = ({ userInfo }) => {
              {
                allSMS.map((item)=>(
                  <div className={`px-2 flex ${item.sender_id == user.id ? 'justify-end':'justify-start '}`}>
-                   {item.sender_id === user.id &&
+                   { item.sender_id === user.id  ? 
+                    (
                      <div className="w-full p-2 flex justify-end  space-x-2  relative ">
                        <p className="p-1 text-white max-w-60 bg-blue-700  rounded-bl-md rounded-tr-md rounded-l-md mr-5">{item.message}</p>
                         <img
@@ -166,8 +167,8 @@ const ChatUser = ({ userInfo }) => {
                           className="h-6 w-6 rounded-full border-1 border-gray-200 absolute bottom-0 right-0 z-10 "
                         />
                      </div>
-                   } 
-                   {item.receiver_id === user.id && 
+                    ):
+                    (    
                     <div className="w-full p-2 flex my-2 space-x-2  relative">
                        <img
                           src={userInfo.avatar_url}
@@ -176,6 +177,7 @@ const ChatUser = ({ userInfo }) => {
                         />
                        <p className="p-1 text-white max-w-60  bg-blue-400 rounded-br-sm rounded-tl-sm rounded-r-sm ml-6">{item.message}</p>
                     </div>
+                    ) 
                    } 
                  </div>
                ))
