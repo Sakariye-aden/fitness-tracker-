@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router';
 import { useAuth } from '../context/AuthContext';
 import { FetchLatestExercise } from '../lib/exercise';
+import { FiPlus } from 'react-icons/fi';
+import supabase from '../lib/supabase';
 
 
 
@@ -25,11 +27,14 @@ const HomePage = () => {
             //  get Recent Active 
                  const getRecentActvity = async ()=>{
                     try {
-                      const result = await FetchLatestExercise(user.id , 3 )
-       
+                   
+                      const {data , error} = await supabase.from('exercises')
+                                     .select('*')  
+                                     .eq('author_id',user.id)     
                        // console.log('result :',result);
-                       setIsRecent(result || [])
-                      
+                       setIsRecent(data || [])
+                       
+                        if(error) throw error
                     } catch (error) {
                       console.log(error);
                     }
@@ -39,9 +44,13 @@ const HomePage = () => {
   },[])
 
 
+    const weaklyGoals = recent.reduce((current , total)=>{
+         return    current + total.reps      
+      },0)
 
 
-    console.log(recent);
+
+      console.log('total: ',weaklyGoals);
 
    
     if(user && isLoading){
@@ -73,35 +82,59 @@ const HomePage = () => {
       <section className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 py-10 px-4">
         {Daily.map((item) => (
           <div key={item.label} className="bg-white rounded-lg shadow-md p-4 text-center">
-            <h3 className="text-xl font-semibold">{item.value}</h3>
-            <p className="text-sm text-gray-500">{item.label}</p>
+            {/* <h3 className="text-xl font-semibold">{item.value}</h3> */}
+            <p className="text-lg font-medium text-gray-800">{item.label}</p>
           </div>
         ))}
       </section>
 
       {/* Goals Section */}
-      <section className="max-w-3xl mx-auto px-4 py-8">
+      <div className="max-w-3xl mx-auto px-4 py-8">
         <h2 className="text-2xl font-bold mb-4">Weekly Goals</h2>
-        <div className="space-y-4">
-          {[
-            { label: "Workouts", progress: 3, total: 5 },
-            { label: "Steps", progress: 42000, total: 70000 },
-          ].map((goal) => (
-            <div key={goal.label}>
-              <div className="flex justify-between text-sm mb-1">
-                <span>{goal.label}</span>
-                <span>{goal.progress}/{goal.total}</span>
+        {
+          recent.length === 0  ?
+           (
+               <div className="bg-white rounded-xl shadow-md p-12 text-center">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2">No workout Yet</h2>
+                  <p className="text-gray-500 max-w-md mx-auto mb-8">
+                      You haven't created any workout yet. 
+                  </p>
+                  <Link
+                      to="/workout"
+                      className="inline-flex items-center px-6 py-3 bg-orange-600 text-white rounded-xl shadow-md hover:bg-orange-700 transition-colors duration-200"
+                  >
+                      <FiPlus className="mr-2" />
+                      Create Your First workout
+                  </Link>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-3">
-                <div
-                  className="bg-blue-500 h-3 rounded-full transition-all"
-                  style={{ width: `${(goal.progress / goal.total) * 100}%` }}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+           )
+           :
+           (
+             <div className="space-y-4" >
+                <div >
+                  <div className="text-md mb-1">
+                    <span>Workouts </span>
+                    <div className="w-full bg-gray-200 rounded-full h-3">
+                     <div
+                       className={`bg-blue-400 h-3 rounded-full transition-all`}
+                            style={{width:`${recent.length}%`}}
+                      />
+                   </div>
+                    <span>Steps </span>
+                    <div className="w-full bg-gray-200 rounded-full h-3">
+                      <div
+                        className={` bg-blue-400 h-3 rounded-full transition-all `}
+                         style={{width:`${weaklyGoals}px`}}
+                      />
+                    </div>
+                  </div>
+                </div>    
+             </div>    
+           )
+
+        }
+        
+      </div>
 
       {/* Quote Section */}
       <section className="text-center py-10 px-4 bg-blue-50">

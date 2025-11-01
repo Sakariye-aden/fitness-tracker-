@@ -8,8 +8,6 @@ import supabase from "../lib/supabase";
 const ChatUser = ({ userInfo }) => {
   const [message, setMassege] = useState("");
   const [isSaving, setisSaving] = useState(false);
-  // const [ReciveMessage, setRecieveMessage] = useState([]);
-  // const [SenderMessage, setSenderMessage] = useState([]);
   const [allSMS , setAllSMS] = useState([])
 
   const { user, profile } = useAuth();
@@ -21,10 +19,7 @@ const ChatUser = ({ userInfo }) => {
 
     if(!userInfo.id && !user) return  
     
-     
-
-    //  getTheSenderData()
-    // getTheRecieverData()
+    
       const RealtimeSupabase = async ()=>{
          try {
            const channel = supabase.getChannels();
@@ -53,30 +48,26 @@ const ChatUser = ({ userInfo }) => {
     // create channel 
     const ChatChanel = supabase.channel(`chat-${user.id}`) 
       // listen Events 
-      .on( 'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'chat',
-          filter: `receiver_id=eq.${user.id}`,
-        },
-        (payload) => {
-          console.log('📥 Received message:', payload);
-          const newMessage = payload.new;
-          setAllSMS((prev) => [...prev, newMessage]);
-        }
-      )
+  
       .on('postgres_changes',
         {
           event: 'INSERT',
           schema: 'public',
-          table: 'chat',
-          filter: `sender_id=eq.${user.id}`,
+          table: 'chat'    
         },
         (payload) => {
           console.log('📤 Sent message:', payload);
-          const newMessage = payload.new;
-          setAllSMS((prev) => [...prev, newMessage]);
+           const newMessage = payload.new;
+            const isRelevant =
+              (newMessage.sender_id === user.id && newMessage.receiver_id === userInfo.id) ||
+              (newMessage.sender_id === userInfo.id && newMessage.receiver_id === user.id);
+
+            if (isRelevant) {
+              setAllSMS((prev) => [...prev, newMessage]);
+              console.log('📥 New message received:', newMessage);
+            }
+
+          
         }
       )  
      .subscribe((status)=>{
@@ -105,27 +96,7 @@ const ChatUser = ({ userInfo }) => {
     }
 
 
-  // the message you sent
-  // const getTheSenderData = async () => {
-  //   const { data } = await supabase
-  //     .from("chat")
-  //     .select("*")
-  //     .or(`and(sender_id.eq."${user.id}",receiver_id.eq."${userInfo.id}")`);
-
-  //   // console.log("the message you sent :", data);
-  //   setSenderMessage(data || []);
-  // };
-
-  //  the message that receiver send you
-  // const getTheRecieverData = async () => {
-  //   const { data } = await supabase
-  //     .from("chat")
-  //     .select("*")
-  //     .or(`and(sender_id.eq."${userInfo.id}",receiver_id.eq."${user.id}")`);
-
-  //   // console.log("the message you Recieve  :", data);
-  //   setRecieveMessage(data || []);
-  // };
+ 
 
   
 // submit Event
@@ -140,10 +111,20 @@ const ChatUser = ({ userInfo }) => {
         receiver_id: userInfo.id,
         message: message,
       });
-
+   
       if (error) throw error;
 
-      // setMassege("");
+        setAllSMS((prev) => [
+            ...prev,
+            {
+            sender_id: user.id,
+            receiver_id: userInfo.id,
+            message,
+            created_at: new Date().toISOString(),
+            },
+         ]);
+
+       
     } catch (error) {
       console.error("inser error :", error);
     } finally {
@@ -151,11 +132,14 @@ const ChatUser = ({ userInfo }) => {
     }
   };
 
+
+
+
   return (
     <div className="bg-white border-r-1 border-gray-300">
       <div className="flex flex-col min-h-screen ">
         {/* Top  */}
-        <div className="border-b-1 border-gray-500">
+        <div className="border-b-1 border-gray-500 ">
           <div className="h-15 flex items-center p-6 ">
             {/* profile */}
             <img
@@ -174,7 +158,7 @@ const ChatUser = ({ userInfo }) => {
         {/*Messagess text  */}
         <div className=" flex-1 p-2">
           {/* messages */}
-          <div className="">
+          <div >
              {
                allSMS.map((item)=>(
                  <div className={`px-2 flex ${item.sender_id == user.id ? 'justify-end':'justify-start '}`}>
@@ -201,38 +185,6 @@ const ChatUser = ({ userInfo }) => {
                  </div>
                ))
              }
-
-
-
-            {/* receiver */}
-              {/* {ReciveMessage.map((current) => (
-                <div key={current.id} className="flex space-x-2  relative my-2  ">
-                  <img
-                    src={userInfo.avatar_url}
-                    alt="photo"
-                    className="h-6 w-6 rounded-full border-1 border-gray-200 absolute bottom-0 left-0  z-11 "
-                  />
-                  <div className="bg-blue-100 p-2 rounded-br-xl rounded-tl-xl rounded-r-xl ml-7">
-                    {current.message}
-                  </div>
-                </div>
-              ))}
-            
-            
-                {SenderMessage.map((send) => (
-                  <div key={send.id} className="relative flex space-x-7 my-2 ">
-                    <div className="flex  justify-end  w-full">
-                      <div className="bg-blue-100 p-2  rounded-bl-xl rounded-tr-xl rounded-l-xl ml-7  ">
-                        {send.message}
-                      </div>
-                    </div>
-                    <img
-                      src={profile.avatar_url}
-                      alt="photo"
-                      className="h-6 w-6 rounded-full border-1 border-gray-200  "
-                    />
-                  </div>
-                ))} */}
           </div>
         </div>
 

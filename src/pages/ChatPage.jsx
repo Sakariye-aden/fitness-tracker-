@@ -116,13 +116,12 @@ const ChatPage = () => {
       {/* mobile design  */}
       <div className="sm:hidden bg-slate-900 min-h-screen">
         {isOpen ? (
-          <div className="relative"> 
-            <FiArrowLeft className="text-md absolute top-6 left-0 z-20 cursor-pointer" 
-              onClick={()=> setisOpen(false)}
-            />
-           <ChatUser userInfo={userData}/>
-          </div>
-         
+           <div className="relative"> 
+             <FiArrowLeft className="text-md absolute top-6 left-0 z-20 cursor-pointer" 
+               onClick={()=> setisOpen(false)}
+             />
+             <ChatUser userInfo={userData}/>
+           </div>         
         ) : (
           <div className="p-6 ">
              <div className="py-4 flex justify-between items-center">
