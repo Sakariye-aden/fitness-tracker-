@@ -162,7 +162,7 @@ const ChatUser = ({ userInfo }) => {
              {
                allSMS.map((item)=>(
                  <div className={`px-2 flex overflow-y-auto ${item.sender_id == user.id ? 'justify-end':'justify-start '}`}>
-                   { item.receiver_id === user.id  ? 
+                   { item.receiver_id === user.id  && item.sender_id === userInfo.id ? 
                     (
                      <div className="w-full p-2 flex justify-end  space-x-2  relative ">
                        <p className="p-1 text-white max-w-60 bg-blue-700  rounded-bl-md rounded-tr-md rounded-l-md mr-5">{item.message}</p>
