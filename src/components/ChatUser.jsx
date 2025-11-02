@@ -79,9 +79,7 @@ const ChatUser = ({ userInfo }) => {
    
   }, [user, userInfo.id]);
 
-   useEffect(() => {
-    console.log('🧾 Updated allSMS:', allSMS);
-  }, [allSMS]);
+  
 
     const FetchAll = async ()=>{
        
@@ -131,7 +129,12 @@ const ChatUser = ({ userInfo }) => {
       setisSaving(false);
     }
   };
-
+   
+  const filteredSMS = allSMS.filter(
+  (item) =>
+    (item.sender_id === user.id && item.receiver_id === userInfo.id) ||
+    (item.sender_id === userInfo.id && item.receiver_id === user.id)
+ );
 
 
 
@@ -160,7 +163,7 @@ const ChatUser = ({ userInfo }) => {
           {/* messages */}
           <div >
              {
-               allSMS.map((item)=>(
+                filteredSMS.map((item)=>(
                  <div className={`px-2 flex overflow-y-auto ${item.sender_id == user.id ? 'justify-end':'justify-start '}`}>
                    { item.sender_id === user.id ? 
                     (
