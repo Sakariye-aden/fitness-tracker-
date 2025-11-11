@@ -35,9 +35,7 @@ const Profile = () => {
           fetch()
       },[user])
 
-  useEffect(()=>{
-    
-      const handleChange = (e)=>{
+   const handleChange = (e)=>{
      const file = e.target.files[0]
       // check the file size 
       if(file.size > 2 * 1024 *1024 ){
@@ -50,7 +48,6 @@ const Profile = () => {
       setAvatarUrl(preview)
    }
 
-  },[avatar])
 
    const handleSubmit = async (e)=>{
 
