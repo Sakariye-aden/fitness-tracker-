@@ -55,7 +55,7 @@ const ChatUser = ({ userInfo }) => {
           table: 'chat'
         },
         (payload) => {
-          console.log('📤 Sent message:', payload);
+          // console.log('📤 Sent message:', payload);
            const newMassage = payload.new
 
           if (newMassage.receiver_id === user.id) {
@@ -136,8 +136,8 @@ const ChatUser = ({ userInfo }) => {
     (item.sender_id === userInfo.id && item.receiver_id === user.id)
  );
 
-
-
+    console.log('filtered:',filteredSMS);
+   
   return (
     <div className="bg-white border-r-1 border-gray-300">
       <div className="flex flex-col min-h-screen ">

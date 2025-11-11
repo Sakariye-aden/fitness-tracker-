@@ -56,6 +56,11 @@ const Profile = () => {
 
        console.log(user);
         setIsLoading(true)
+
+        if(!avatar){
+          toast.error('you have not selected any image yet please ')
+          return
+        }
       try {
         // frist Upload the img then insert 
         const fileEx = avatar.name.split('.').pop()
@@ -67,6 +72,8 @@ const Profile = () => {
         // upload img 
         const {error } = await supabase.storage.from('profile')
            .upload(filePath ,avatar)
+
+            toast.success('uploaded image successfully')
            if(error){
              console.error("error Upload:",error);
              toast.error("upload error ")
@@ -140,7 +147,7 @@ const Profile = () => {
                />
                <input type="email" 
                      className="w-full block my-4 px-4 py-2 border rounded-md focus:outline-none"
-                    value={'zakiyareaden@gmail.com'}
+                    value={user.email}
                   readOnly
                />
                 <div className='flex justify-end'>
