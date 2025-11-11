@@ -73,7 +73,7 @@ const Header = () => {
                 >
                  {
                    profile ? <img
-                    src={profile.avatar_url}
+                    src={profile?.avatar_url}
                     alt="avatat"
                     className="w-10 h-10 rounded-full object-cover"
                   />
